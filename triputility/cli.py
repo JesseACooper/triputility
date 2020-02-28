@@ -13,8 +13,4 @@ def cli(ctx):
         click.echo("Aborting: AWS credentials not set - did you run aws-login?")
         sys.exit()
 
-    # config = Config(os.path.join(os.path.expanduser("~"), ".triputility-cli.ini"))
-    # config = Config("config.ini")
-
-
 cli.add_command(maptrip)

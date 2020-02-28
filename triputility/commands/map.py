@@ -10,16 +10,22 @@ from io import BytesIO
 @click.argument('trip_bucket_name')
 @click.argument('trip_file_name')
 def maptrip(trip_bucket_name, trip_file_name):
-    file_contents = get_data_file(trip_file_name)
+    file_contents = get_data_file(trip_bucket_name, trip_file_name)
+    if (file_contents == None):
+        click.echo("Could not retrieve file contents from S3, likely due to expired AWS tokens. Aborting.")
+        return
     json_contents = json.loads(file_contents)
     trip_info = pyjq.all('.locations | first.timestamp |= todateiso8601 | last.timestamp |= todateiso8601 | "start: \(first.timestamp)", "end: \(last.timestamp)", "map: https://google.com/maps/dir/\(first.latitude),\(first.longitude)/\(last.latitude),\(last.longitude)"', json_contents)
     for obj in trip_info:
         click.echo(obj)
 
-def get_data_file(trip_file_name):
-    s3 = boto3.resource('s3')
-    response_object = s3.Object(trip_bucket_name, trip_file_name).get()
-    object_body = response_object['Body'].read()
-    gzipfile = BytesIO(object_body)
-    gzip_file_handle = gzip.GzipFile(fileobj=gzipfile)
-    return gzip_file_handle.read()
+def get_data_file(trip_bucket_name, trip_file_name):
+    try:
+        s3 = boto3.resource('s3')
+        response_object = s3.Object(trip_bucket_name, trip_file_name).get()
+        object_body = response_object['Body'].read()
+        gzipfile = BytesIO(object_body)
+        gzip_file_handle = gzip.GzipFile(fileobj=gzipfile)
+        return gzip_file_handle.read()
+    except Exception as e:
+        click.echo(e)
