@@ -16,16 +16,11 @@ class Config:
         self.persist()
 
     def get(self, configuration):
-        return self.config["DEFAULT"][configuration]
+        try:
+            return self.config["DEFAULT"][configuration]
+        except KeyError as error:
+            return None
 
     @property
-    def aws_access_key_id(self):
-        return self.get("aws_access_key_id")
-
-    @property
-    def aws_secret_access_key(self):
-        return self.get("aws_secret_access_key")
-
-    @property
-    def aws_session_token(self):
-        return self.get("aws_session_token")
+    def redash_api_key(self):
+        return self.get("redash_api_key")
