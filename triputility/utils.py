@@ -1,12 +1,17 @@
 GET_TRIP_QUERY_NAME = "Triputility query"
 
+QUERY_RETURN_FIELDS = "trips.*, telematics_application_id, telematics_applications.name as telematics_application_name, trip_bucket"
+QUERY_JOINS = "trips join telematics_users on trips.telematics_user_id = telematics_users.id join telematics_applications on telematics_users.telematics_application_id = telematics_applications.id"
+
 def get_trip_info(client, trip_query):
     response = client.post(
         "queries",
         dict(query=trip_query, data_source_id=7090, name=GET_TRIP_QUERY_NAME)
     )
+
     query_id = response.get("id")
     data = perform_download(client, query_id)
+
     return data
 
 def perform_download(client, query_id):
@@ -21,7 +26,7 @@ def condition_builder(id, data_file_name):
         return f"trips.id = \'{id}\'"
 
 def compose_query(condition):
-    return f"select trips.*, telematics_application_id, telematics_applications.name as telematics_application_name, trip_bucket from trips join telematics_users on trips.telematics_user_id = telematics_users.id join telematics_applications on telematics_users.telematics_application_id = telematics_applications.id where {condition} limit 1"
+    return f"select {QUERY_RETURN_FIELDS} from {QUERY_JOINS} where {condition}"
 
 def parse_trip_info(trip_info):
     return trip_info['query_result']['data']['rows'][0]
