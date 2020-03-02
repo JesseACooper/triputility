@@ -1,11 +1,12 @@
 from configparser import ConfigParser
 
+import os
 
 class Config:
-    def __init__(self, path=None):
+    def __init__(self):
         self.config = ConfigParser()
-        self.path = path
-        self.config.read(self.path)
+        self.paths = [os.path.join(os.path.expanduser("~"), ".triputility-cli.ini"), "config.ini"]
+        self.config.read(self.paths)
 
     def persist(self):
         with open(self.path, "w") as f:
