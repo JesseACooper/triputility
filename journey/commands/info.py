@@ -1,13 +1,11 @@
 import click
 import json
 
-from triputility.utils import condition_builder, compose_query, get_trip_info, parse_trip_info
+from journey.utils import condition_builder, compose_query, get_trip_info, parse_trip_info
 
-GET_TRIP_QUERY_NAME = "Triputility query"
-
-@click.command()
-@click.option('--id', type=str, help="The id of the trip")
-@click.option('--data-file-name', type=str, help="The data file name of the trip")
+@click.command(help="Retrieve information about a trip from Redash")
+@click.option('--id', '-i', type=str, help="The id of the trip")
+@click.option('--data-file-name', '-d', type=str, help="The data file name of the trip")
 @click.option('--verbose', '-v', is_flag=True, default=False, help="Displays the full trip info in a JSON blob")
 @click.pass_obj
 def info(client, id, data_file_name, verbose):

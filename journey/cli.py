@@ -1,10 +1,10 @@
 import click
 import sys
 
-from triputility.config import Config
-from triputility.redash_client import RedashClient
-from triputility.commands.map import map_
-from triputility.commands.info import info
+from journey.config import Config
+from journey.redash_client import RedashClient
+from journey.commands.map import map_
+from journey.commands.info import info
 
 @click.group(help="Query various details about trips")
 @click.pass_context

@@ -5,7 +5,7 @@ import os
 class Config:
     def __init__(self):
         self.config = ConfigParser()
-        self.paths = [os.path.join(os.path.expanduser("~"), ".triputility-cli.ini"), "config.ini"]
+        self.paths = [os.path.join(os.path.expanduser("~"), ".journey-cli.ini"), "config.ini"]
         self.config.read(self.paths)
 
     def persist(self):

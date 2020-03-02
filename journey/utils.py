@@ -1,7 +1,7 @@
 import click
 import sys
 
-GET_TRIP_QUERY_NAME = "Triputility query"
+GET_TRIP_QUERY_NAME = "Journey query"
 
 QUERY_RETURN_FIELDS = "trips.*, telematics_application_id, telematics_applications.name as telematics_application_name, trip_bucket"
 QUERY_JOINS = "trips join telematics_users on trips.telematics_user_id = telematics_users.id join telematics_applications on telematics_users.telematics_application_id = telematics_applications.id"

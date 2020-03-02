@@ -7,12 +7,12 @@ import json
 import pyjq
 
 from io import BytesIO
-from triputility.utils import condition_builder, compose_query, get_trip_info, parse_trip_info
+from journey.utils import condition_builder, compose_query, get_trip_info, parse_trip_info
 
 @click.command(name="map", help="Get a trip file from S3 and output a link to Google maps of the trip")
-@click.option('--id', type=str, help="The id of the trip")
-@click.option('--data-file-name', type=str, help="The data file name of the trip")
-@click.option('--trip-bucket', type=str, help="The name of the s3 bucket the data file is stored in")
+@click.option('--id', '-i', type=str, help="The id of the trip")
+@click.option('--data-file-name', '-d', type=str, help="The data file name of the trip")
+@click.option('--trip-bucket', type=str, help="The name of the s3 bucket to look in")
 @click.pass_obj
 def map_(client, id, data_file_name, trip_bucket):
     aws_key = os.environ.get('AWS_ACCESS_KEY_ID')
