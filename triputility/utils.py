@@ -1,3 +1,6 @@
+import click
+import sys
+
 GET_TRIP_QUERY_NAME = "Triputility query"
 
 QUERY_RETURN_FIELDS = "trips.*, telematics_application_id, telematics_applications.name as telematics_application_name, trip_bucket"
@@ -29,4 +32,25 @@ def compose_query(condition):
     return f"select {QUERY_RETURN_FIELDS} from {QUERY_JOINS} where {condition}"
 
 def parse_trip_info(trip_info):
-    return trip_info['query_result']['data']['rows'][0]
+    rows = trip_info['query_result']['data']['rows']
+    if len(rows) > 1:
+        click.echo("More than one trip found, please select from the below list by entering its index:")
+        for index, trip_info in enumerate(rows):
+            click.echo(f"{index}: id: {trip_info['id']} | data_file_name: {trip_info['data_file_name']}")
+
+        value = -1
+        valid_index_input = False
+        while not valid_index_input:
+            value = click.prompt('Please enter a valid integer index', type=int)
+            if value >= 0 and value <= len(rows) - 1:
+                valid_index_input = True
+            else:
+                click.echo("Invalid index")
+
+        click.echo(f"Selecting trip at index {value}")
+        return rows[value]
+    elif len(rows) < 1:
+        click.echo("No results found, aborting")
+        sys.exit()
+    else:
+        return rows[0]
