@@ -1,4 +1,5 @@
 import click
+import os
 import sys
 import boto3
 import gzip
@@ -14,6 +15,11 @@ from triputility.utils import condition_builder, compose_query, get_trip_info, p
 @click.option('--trip-bucket', type=str, help="The name of the s3 bucket the data file is stored in")
 @click.pass_obj
 def map_(client, id, data_file_name, trip_bucket):
+    aws_key = os.environ.get('AWS_ACCESS_KEY_ID')
+    if not aws_key:
+        click.echo("Aborting: AWS credentials not set - did you run aws-login?")
+        sys.exit()
+
     if not data_file_name and not id:
         click.echo("No identifying information for trip provided, aborting")
         sys.exit()

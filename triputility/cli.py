@@ -10,11 +10,6 @@ from triputility.commands.info import info
 @click.group(help="Query various details about trips")
 @click.pass_context
 def cli(ctx):
-    aws_key = os.environ.get('AWS_ACCESS_KEY_ID')
-    if not aws_key:
-        click.echo("Aborting: AWS credentials not set - did you run aws-login?")
-        sys.exit()
-
     config = Config(os.path.join(os.path.expanduser("~"), ".triputility-cli.ini"))
 
     if not config.redash_api_key or config.redash_api_key == '':
